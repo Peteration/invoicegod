@@ -3,15 +3,17 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import puppeteer from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
+import crypto from 'crypto';
 import { sanitizeHtml } from '../../lib/security';
 
 // Pre-compiled templates
 const TEMPLATES = {
   standard: compile(
-    readFileSync(path.join(process.cwd(), 'templates/standard.hbs'), 'utf-8'
+    readFileSync(path.join(process.cwd(), 'templates/standard.hbs'), 'utf-8')
   ),
   minimal: compile(
     readFileSync(path.join(process.cwd(), 'templates/minimal.hbs'), 'utf-8')
+  )
 };
 
 export async function generateSecurePDF(invoiceData: any, templateName = 'standard') {
