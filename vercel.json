@@ -1,38 +1,6 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/invoices/([^/]+)\\.pdf",
-      "dest": "/api/generate-pdf?id=$1",
-      "headers": {
-        "Content-Type": "application/pdf"
-      }
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'"
-        }
-      ]
-    }
-  ],
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "cleanUrls": true,
+  "trailingSlash": false
 }
