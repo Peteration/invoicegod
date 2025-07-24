@@ -1,114 +1,48 @@
 {
   "version": 2,
-  "build": {
-    "env": {
-      "NEXT_PUBLIC_APP_MODE": "production",
-      "NEXT_PUBLIC_WEB3_AUTH_ID": "@web3_auth_key",
-      "NEXT_PUBLIC_CRYPTO_PROCESSOR": "@crypto_processor_env"
-    }
-  },
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/nextjs",
-      "config": {
-        "distDir": ".next",
-        "includeFiles": [
-          "public/**",
-          "core/**",
-          "lib/**"
-        ]
-      }
+      "use": "@vercel/nextjs"
     }
   ],
   "routes": [
-    // Blockchain APIs
     {
-      "src": "/api/auth/web3-login",
-      "dest": "/api/auth/web3-login.ts",
-      "headers": {
-        "Access-Control-Allow-Origin": "*"
-      }
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
     },
     {
-      "src": "/api/blockchain/(.*)",
-      "dest": "/api/$1",
-      "headers": {
-        "X-Blockchain-API": "true"
-      }
-    },
-
-    // PDF Generation
-    {
-      "src": "/invoices/(.*)\\.pdf",
-      "dest": "/core/pdf/generator.ts?id=$1",
+      "src": "/invoices/([^/]+)\\.pdf",
+      "dest": "/api/invoices/[id]/receipt?id=$1",
       "headers": {
         "Content-Type": "application/pdf",
         "Cache-Control": "public, max-age=604800"
       }
     },
-
-    // GDPR Compliance
     {
-      "src": "/api/gdpr/delete",
-      "dest": "/api/gdpr/delete.ts",
-      "headers": {
-        "X-Compliance-Level": "gdpr"
-      }
+      "src": "/invoices/([^/]+)",
+      "dest": "/api/invoices/[id]/receipt?id=$1"
     },
-
-    // Payment Webhooks
     {
-      "src": "/api/webhooks/(stripe|paypal|plaid|coinbase)",
-      "dest": "/api/webhooks/$1.ts",
-      "headers": {
-        "X-Webhook-Verify": "true"
-      }
-    },
-
-    // Dynamic Invoices
-    {
-      "src": "/invoices/([A-Za-z0-9_-]+)",
-      "dest": "/pages/api/invoices/[id]/receipt.ts?id=$1",
-      "headers": {
-        "Cache-Control": "s-maxage=300, stale-while-revalidate"
-      }
-    },
-
-    // Security Policies
-    {
-      "src": "/(.*)",
-      "headers": {
-        "Content-Security-Policy": "default-src 'self' *.yourdomain.com; script-src 'self' 'unsafe-eval' *.web3auth.io; connect-src 'self' *.blockchainapis.com",
-        "X-Frame-Options": "DENY",
-        "Permissions-Policy": "geolocation=(), microphone=()"
-      }
+      "src": "/crypto-payment/(.*)",
+      "dest": "/components/Invoice/PaymentQR?invoiceId=$1"
     }
   ],
-  "rewrites": [
+  "headers": [
     {
-      "source": "/crypto-payment/:invoiceId",
-      "destination": "/components/Invoice/PaymentQR?invoiceId=:invoiceId"
-    },
-    {
-      "source": "/escrow/:action",
-      "destination": "/components/Escrow/ApprovalPanel?action=:action"
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'"
+        }
+      ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/old-invoice-system",
-      "destination": "/invoice-creator",
-      "permanent": true
-    }
-  ],
-  "env": {
-    "BLOCKCHAIN_RPC_URL": "@blockchain_rpc_url",
-    "STRIPE_WEBHOOK_SECRET": "@stripe_webhook_secret",
-    "GDPR_DELETE_TOKEN": "@gdpr_delete_token",
-    "PDF_ENCRYPTION_KEY": "@pdf_encryption_key"
-  },
-  "regions": ["iad1", "fra1"],  // US+EU coverage
   "functions": {
     "api/auth/web3-login.ts": {
       "memory": 3008,
@@ -119,8 +53,5 @@
       "maxDuration": 10
     }
   },
-  "framework": "nextjs",
-  "public": false,
-  "cleanUrls": true,
-  "trailingSlash": false
+  "regions": ["iad1"]
 }
