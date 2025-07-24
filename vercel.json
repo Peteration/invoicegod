@@ -1,0 +1,126 @@
+{
+  "version": 2,
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_APP_MODE": "production",
+      "NEXT_PUBLIC_WEB3_AUTH_ID": "@web3_auth_key",
+      "NEXT_PUBLIC_CRYPTO_PROCESSOR": "@crypto_processor_env"
+    }
+  },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/nextjs",
+      "config": {
+        "distDir": ".next",
+        "includeFiles": [
+          "public/**",
+          "core/**",
+          "lib/**"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    // Blockchain APIs
+    {
+      "src": "/api/auth/web3-login",
+      "dest": "/api/auth/web3-login.ts",
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "src": "/api/blockchain/(.*)",
+      "dest": "/api/$1",
+      "headers": {
+        "X-Blockchain-API": "true"
+      }
+    },
+
+    // PDF Generation
+    {
+      "src": "/invoices/(.*)\\.pdf",
+      "dest": "/core/pdf/generator.ts?id=$1",
+      "headers": {
+        "Content-Type": "application/pdf",
+        "Cache-Control": "public, max-age=604800"
+      }
+    },
+
+    // GDPR Compliance
+    {
+      "src": "/api/gdpr/delete",
+      "dest": "/api/gdpr/delete.ts",
+      "headers": {
+        "X-Compliance-Level": "gdpr"
+      }
+    },
+
+    // Payment Webhooks
+    {
+      "src": "/api/webhooks/(stripe|paypal|plaid|coinbase)",
+      "dest": "/api/webhooks/$1.ts",
+      "headers": {
+        "X-Webhook-Verify": "true"
+      }
+    },
+
+    // Dynamic Invoices
+    {
+      "src": "/invoices/([A-Za-z0-9_-]+)",
+      "dest": "/pages/api/invoices/[id]/receipt.ts?id=$1",
+      "headers": {
+        "Cache-Control": "s-maxage=300, stale-while-revalidate"
+      }
+    },
+
+    // Security Policies
+    {
+      "src": "/(.*)",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self' *.yourdomain.com; script-src 'self' 'unsafe-eval' *.web3auth.io; connect-src 'self' *.blockchainapis.com",
+        "X-Frame-Options": "DENY",
+        "Permissions-Policy": "geolocation=(), microphone=()"
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/crypto-payment/:invoiceId",
+      "destination": "/components/Invoice/PaymentQR?invoiceId=:invoiceId"
+    },
+    {
+      "source": "/escrow/:action",
+      "destination": "/components/Escrow/ApprovalPanel?action=:action"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/old-invoice-system",
+      "destination": "/invoice-creator",
+      "permanent": true
+    }
+  ],
+  "env": {
+    "BLOCKCHAIN_RPC_URL": "@blockchain_rpc_url",
+    "STRIPE_WEBHOOK_SECRET": "@stripe_webhook_secret",
+    "GDPR_DELETE_TOKEN": "@gdpr_delete_token",
+    "PDF_ENCRYPTION_KEY": "@pdf_encryption_key"
+  },
+  "regions": ["iad1", "fra1"],  // US+EU coverage
+  "functions": {
+    "api/auth/web3-login.ts": {
+      "memory": 3008,
+      "maxDuration": 15
+    },
+    "api/webhooks/*.ts": {
+      "memory": 2048,
+      "maxDuration": 10
+    }
+  },
+  "framework": "nextjs",
+  "public": false,
+  "cleanUrls": true,
+  "trailingSlash": false
+}
