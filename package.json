@@ -1,0 +1,38 @@
+{
+  "dependencies": {
+    "@formatjs/intl-datetimeformat": "^6.18.0",
+    "@headlessui/react": "^2.2.4",
+    "@heroicons/react": "^2.2.0",
+    "@stripe/stripe-js": "^7.5.0",
+    "date-fns": "^4.1.0",
+    "ethers": "^6.15.0",
+    "eu-vat": "^1.0.1",
+    "lru-cache": "^11.1.0",
+    "react-country-region-selector": "^4.0.2",
+    "react-qr-code": "^2.0.18",
+    "stripe": "^18.3.0"
+  },
+  "devDependencies": {
+    "@types/lru-cache": "^7.10.9",
+    "@types/react-textarea-autosize": "^4.3.6",
+    "@types/stripe": "^8.0.416"
+  },
+  "name": "invoice",
+  "version": "1.0.0",
+  "main": "next.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/invoicegod.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/your-username/invoicegod/issues"
+  },
+  "homepage": "https://github.com/your-username/invoicegod#readme",
+  "description": ""
+}
