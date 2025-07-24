@@ -1,32 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  i18n: {
-    locales: ['en', 'es', 'fr', 'de', 'ja', 'zh', 'ar', 'ru'],
-    defaultLocale: 'en',
-    localeDetection: true,
-  },
-  reactStrictMode: true,
-  swcMinify: true,
-  images: {
-    domains: ['lh3.googleusercontent.com'], // Add your image domains
-  },
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: securityHeaders,
-      },
-    ];
-  },
-};
- 
-module.exports = {
-  i18n: {
-    locales: ['en', 'es'],
-    defaultLocale: 'en',
-  }
-}
-// Security headers for Vercel
+
+// Security headers configuration
 const securityHeaders = [
   {
     key: 'X-DNS-Prefetch-Control',
@@ -61,5 +35,40 @@ const securityHeaders = [
     value: `default-src 'self'; script-src 'self' 'unsafe-eval' *.vercel-insights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' *.googleapis.com *.stripe.com; frame-src 'none'; base-uri 'none'; form-action 'self'`,
   },
 ];
+
+const nextConfig = {
+  i18n: {
+    locales: ['en', 'es', 'fr', 'de', 'ja', 'zh', 'ar', 'ru'],
+    defaultLocale: 'en',
+    localeDetection: true,
+  },
+  reactStrictMode: true,
+  swcMinify: true,
+  output: 'standalone', // Required for Vercel
+  images: {
+    domains: ['lh3.googleusercontent.com'],
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+    ];
+  },
+  // Optional: Add rewrites if needed
+  async rewrites() {
+    return [
+      {
+        source: '/invoices/:id.pdf',
+        destination: '/api/invoices/[id]/receipt'
+      },
+      {
+        source: '/crypto-payment/:invoiceId',
+        destination: '/components/Invoice/PaymentQR'
+      }
+    ]
+  }
+};
 
 module.exports = nextConfig;
