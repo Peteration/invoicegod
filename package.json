@@ -1,38 +1,27 @@
 {
+  "name": "invoicegod",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
   "dependencies": {
-    "@formatjs/intl-datetimeformat": "^6.18.0",
-    "@headlessui/react": "^2.2.4",
-    "@heroicons/react": "^2.2.0",
-    "@stripe/stripe-js": "^7.5.0",
-    "date-fns": "^4.1.0",
-    "ethers": "^6.15.0",
-    "eu-vat": "^1.0.1",
-    "lru-cache": "^11.1.0",
-    "react-country-region-selector": "^4.0.2",
-    "react-qr-code": "^2.0.18",
-    "stripe": "^18.3.0"
+    "next": "^14.1.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-intl": "^6.5.4",
+    "pdf-lib": "^1.17.1",
+    "qr-code-styling": "^1.6.0"
   },
   "devDependencies": {
-    "@types/lru-cache": "^7.10.9",
-    "@types/react-textarea-autosize": "^4.3.6",
-    "@types/stripe": "^8.0.416"
+    "@types/node": "^20.11.7",
+    "@types/react": "^18.2.55",
+    "typescript": "^5.3.3"
   },
-  "name": "invoice",
-  "version": "1.0.0",
-  "main": "next.config.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/your-username/invoicegod.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/your-username/invoicegod/issues"
-  },
-  "homepage": "https://github.com/your-username/invoicegod#readme",
-  "description": ""
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
