@@ -3,22 +3,20 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/nextjs",
-      "config": {
-        "functions": {
-          "api/auth/web3-login.ts": {
-            "memory": 3008,
-            "maxDuration": 15
-          }
-        }
-      }
+      "use": "@vercel/next"
     }
   ],
-  "redirects": [
+  "routes": [
     {
-      "source": "/old-invoice",
-      "destination": "/new-invoice",
-      "permanent": true
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/invoices/([^/]+)\\.pdf",
+      "dest": "/api/generate-pdf?id=$1",
+      "headers": {
+        "Content-Type": "application/pdf"
+      }
     }
   ],
   "headers": [
@@ -36,7 +34,5 @@
       ]
     }
   ],
-  "cleanUrls": true,
-  "trailingSlash": false,
   "regions": ["iad1"]
 }
