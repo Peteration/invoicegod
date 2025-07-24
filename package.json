@@ -14,7 +14,9 @@
     "react-dom": "^18.2.0",
     "react-intl": "^6.5.4",
     "pdf-lib": "^1.17.1",
-    "qr-code-styling": "^1.6.0"
+    "qr-code-styling": "^1.6.0",
+    "@vercel/og": "^0.6.8",
+    "axios": "^1.6.8"
   },
   "devDependencies": {
     "@types/node": "^20.11.7",
