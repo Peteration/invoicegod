@@ -17,8 +17,9 @@ export function generateCSV(
               : str;
           })
           .join(delimiter)
+      )
       .join('\n');
-  } catch (error) {
+  } catch (error: any) {
     audit.logSecurityEvent('CSV_GENERATION_FAILED', {
       error: error.message
     });
@@ -34,10 +35,12 @@ export async function generateCSVFromJSON(
   } = {}
 ): Promise<string> {
   const delimiter = options.delimiter || ',';
-  const headers = options.headers || Object.keys(data[0] || {}).map(key => ({
-    key,
-    label: key
-  }));
+  const headers =
+    options.headers ||
+    Object.keys(data[0] || {}).map(key => ({
+      key,
+      label: key
+    }));
 
   const csvData = [
     headers.map(h => h.label),
