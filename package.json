@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsc && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -15,8 +15,9 @@
     "react-intl": "^6.5.4",
     "pdf-lib": "^1.17.1",
     "qr-code-styling": "^1.6.0",
-    "@vercel/og": "^0.6.8",
-    "axios": "^1.6.8"
+    "axios": "^1.6.8",
+    "@heroicons/react": "^2.1.1",
+    "@headlessui/react": "^1.7.17"
   },
   "devDependencies": {
     "@types/node": "^20.11.7",
