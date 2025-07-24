@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 
-// Security headers configuration
 const securityHeaders = [
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
   { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
@@ -16,11 +15,11 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
-  output: 'standalone', // Critical for Vercel deployment
+  output: 'standalone',
   i18n: {
     locales: ['en', 'es', 'fr', 'de', 'ja', 'zh', 'ar', 'ru'],
     defaultLocale: 'en',
-    localeDetection: true,
+    localeDetection: false, // Changed from true to false
   },
   reactStrictMode: true,
   swcMinify: true,
